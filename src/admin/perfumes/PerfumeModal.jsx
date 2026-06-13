@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPerfume, updatePerfume } from '../../api/perfumeService';
 
-const empty = { name: '', brand: '', description: '', sizes: [{ size: '', price: '', stock: '' }], imageUrls: [''], categoryId: '' };
+const empty = { name: '', brand: '', description: '', sizes: [{ size: '', price: '', stock: '' }], imageUrls: [''], videoUrls: [''], categoryId: '' };
 
 export default function PerfumeModal({ perfume, categories, onClose, onSaved }) {
   const isEdit = !!perfume;
@@ -17,6 +17,7 @@ export default function PerfumeModal({ perfume, categories, onClose, onSaved }) 
         description: perfume.description || '',
         sizes: perfume.sizes && perfume.sizes.length > 0 ? perfume.sizes.map(s => ({ size: s.size || '', price: s.price || '', stock: s.stock ?? '' })) : [{ size: '', price: '', stock: '' }],
         imageUrls: perfume.imageUrls && perfume.imageUrls.length > 0 ? [...perfume.imageUrls] : [''],
+        videoUrls: perfume.videoUrls && perfume.videoUrls.length > 0 ? [...perfume.videoUrls] : [''],
         categoryId: perfume.categoryId || '',
       });
     } else {
@@ -50,6 +51,18 @@ export default function PerfumeModal({ perfume, categories, onClose, onSaved }) 
     setForm({ ...form, imageUrls: newUrls.length > 0 ? newUrls : [''] });
   };
 
+  const handleVideoUrlChange = (index, value) => {
+    const newUrls = [...form.videoUrls];
+    newUrls[index] = value;
+    setForm({ ...form, videoUrls: newUrls });
+  };
+
+  const addVideoUrl = () => setForm({ ...form, videoUrls: [...form.videoUrls, ''] });
+  const removeVideoUrl = (index) => {
+    const newUrls = form.videoUrls.filter((_, i) => i !== index);
+    setForm({ ...form, videoUrls: newUrls.length > 0 ? newUrls : [''] });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -64,11 +77,13 @@ export default function PerfumeModal({ perfume, categories, onClose, onSaved }) 
       }));
 
     const processedImageUrls = form.imageUrls.filter(url => url.trim() !== '');
+    const processedVideoUrls = form.videoUrls ? form.videoUrls.filter(url => url.trim() !== '') : [];
 
     const payload = {
       ...form,
       sizes: processedSizes,
       imageUrls: processedImageUrls,
+      videoUrls: processedVideoUrls,
       categoryId: form.categoryId || null,
     };
 
@@ -155,7 +170,7 @@ export default function PerfumeModal({ perfume, categories, onClose, onSaved }) 
             </div>
             {form.imageUrls.map((url, index) => (
               <div key={index} className="flex gap-2 mb-2 items-center">
-                <input type="url" placeholder="https://…" value={url} onChange={(e) => handleImageUrlChange(index, e.target.value)} className="form-input flex-1" />
+                <input type="text" placeholder="https://…" value={url} onChange={(e) => handleImageUrlChange(index, e.target.value)} className="form-input flex-1" />
                 <button type="button" onClick={() => removeImageUrl(index)} className="text-red-500 hover:text-red-700">
                   <i className="ri-delete-bin-line" />
                 </button>
@@ -167,6 +182,32 @@ export default function PerfumeModal({ perfume, categories, onClose, onSaved }) 
             <div className="image-preview flex gap-2 overflow-x-auto pb-2">
               {form.imageUrls.filter(u => u.trim() !== '').map((url, i) => (
                 <img key={i} src={url} alt={`Preview ${i}`} onError={(e) => e.target.style.display = 'none'} className="h-16 object-contain" />
+              ))}
+            </div>
+          )}
+
+          {/* Videos Section */}
+          <div className="form-group border-t pt-4 mt-2">
+            <div className="flex justify-between items-center mb-2">
+              <label className="font-bold">Video URLs</label>
+              <button type="button" onClick={addVideoUrl} className="text-xs bg-[#f5f1ea] px-2 py-1 rounded text-[#1e120e] hover:bg-[#eae3da]">
+                + Add Video
+              </button>
+            </div>
+            {(form.videoUrls || ['']).map((url, index) => (
+              <div key={index} className="flex gap-2 mb-2 items-center">
+                <input type="text" placeholder="https://…" value={url} onChange={(e) => handleVideoUrlChange(index, e.target.value)} className="form-input flex-1" />
+                <button type="button" onClick={() => removeVideoUrl(index)} className="text-red-500 hover:text-red-700">
+                  <i className="ri-delete-bin-line" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {(form.videoUrls || []).filter(u => u.trim() !== '').length > 0 && (
+            <div className="video-preview flex gap-2 overflow-x-auto pb-2">
+              {(form.videoUrls || []).filter(u => u.trim() !== '').map((url, i) => (
+                <video key={i} src={url} className="h-16 w-24 object-cover border rounded" controls preload="metadata" onError={(e) => e.target.style.display = 'none'} />
               ))}
             </div>
           )}

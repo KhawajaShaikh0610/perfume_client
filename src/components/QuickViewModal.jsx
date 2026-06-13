@@ -15,12 +15,16 @@ export default function QuickViewModal({
 
   if (!quickViewProduct) return null;
 
-  const images =
-    quickViewProduct.images?.length > 0
-      ? quickViewProduct.images
-      : [quickViewProduct.image];
-
-
+  const media = [
+    ...(quickViewProduct.images?.length > 0
+      ? quickViewProduct.images.map((url) => ({ type: "image", url }))
+      : quickViewProduct.image
+      ? [{ type: "image", url: quickViewProduct.image }]
+      : []),
+    ...(quickViewProduct.videos?.length > 0
+      ? quickViewProduct.videos.map((url) => ({ type: "video", url }))
+      : []),
+  ];
 
   const selectedSizeData = quickViewProduct.sizes?.find(
     (s) => s.size === selectedSize
@@ -32,13 +36,13 @@ export default function QuickViewModal({
 
   const nextImage = (e) => {
     e.stopPropagation();
-    setCurrentImage((prev) => (prev + 1) % images.length);
+    setCurrentImage((prev) => (prev + 1) % media.length);
   };
 
   const prevImage = (e) => {
     e.stopPropagation();
     setCurrentImage((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
+      prev === 0 ? media.length - 1 : prev - 1
     );
   };
 
@@ -72,34 +76,44 @@ export default function QuickViewModal({
           {/* Slider Container */}
           <div className="relative w-full overflow-hidden">
 
-            {/* Images */}
+            {/* Images & Videos */}
             <div
               className="flex transition-transform duration-700 ease-in-out"
               style={{
-                width: `${images.length * 100}%`,
-                transform: `translateX(-${currentImage * (100 / images.length)
-                  }%)`,
+                width: `${media.length * 100}%`,
+                transform: `translateX(-${currentImage * (100 / media.length)}%)`,
               }}
             >
-              {images.map((img, index) => (
+              {media.map((item, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-center flex-shrink-0"
                   style={{
-                    width: `${100 / images.length}%`,
+                    width: `${100 / media.length}%`,
                   }}
                 >
-                  <img
-                    src={img}
-                    alt={`${quickViewProduct.name}-${index}`}
-                    className="max-h-[450px] w-auto object-contain"
-                  />
+                  {item.type === "video" ? (
+                    <div className="relative max-h-[450px] w-full h-full flex items-center justify-center p-4">
+                      <video
+                        src={item.url}
+                        controls
+                        className="max-h-[400px] max-w-full object-contain rounded"
+                        preload="metadata"
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      src={item.url}
+                      alt={`${quickViewProduct.name}-${index}`}
+                      className="max-h-[450px] w-auto object-contain"
+                    />
+                  )}
                 </div>
               ))}
             </div>
 
             {/* Previous Button */}
-            {images.length > 1 && (
+            {media.length > 1 && (
               <button
                 onClick={prevImage}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:scale-105 transition"
@@ -109,7 +123,7 @@ export default function QuickViewModal({
             )}
 
             {/* Next Button */}
-            {images.length > 1 && (
+            {media.length > 1 && (
               <button
                 onClick={nextImage}
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:scale-105 transition"
@@ -119,9 +133,9 @@ export default function QuickViewModal({
             )}
 
             {/* Dots */}
-            {images.length > 1 && (
+            {media.length > 1 && (
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-30">
-                {images.map((_, index) => (
+                {media.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImage(index)}

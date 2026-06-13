@@ -101,6 +101,7 @@ export function apiPerfumeToDisplay(p) {
     tagline: p.tagline || '',
     image: (p.imageUrls && p.imageUrls.length > 0) ? p.imageUrls[0] : '/img-1.png',
     images: p.imageUrls || [],
+    videos: p.videoUrls || [],
     description: p.description || '',
     rating: p.rating ? String(p.rating) : '5.0',
     sizes: sizes,
