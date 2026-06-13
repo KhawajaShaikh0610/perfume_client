@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { getPerfumes } from './api/perfumeService'
-import { fragranceDetails, bodyCare as staticBodyCare, apiPerfumeToDisplay } from './data/perfumeData'
+import { bodyCare as staticBodyCare, apiPerfumeToDisplay } from './data/perfumeData'
 
 // Landing page components
 import CustomCursor from './components/CustomCursor'

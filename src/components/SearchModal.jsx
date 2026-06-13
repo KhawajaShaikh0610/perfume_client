@@ -120,7 +120,7 @@ export default function SearchModal({
             <div>
               <p className="text-[10px] uppercase tracking-widest text-[#8d7f75] mb-3 font-semibold">Popular Searches</p>
               <div className="flex flex-wrap gap-2">
-                {['Iris Noir', 'Body Wash', 'Vanilla', 'Magnolia', 'Jasmin'].map((term) => (
+                {['OL7 EDITION'].map((term) => (
                   <button
                     key={term}
                     onClick={() => setSearchQuery(term)}
