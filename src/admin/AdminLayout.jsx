@@ -25,7 +25,7 @@ export default function AdminLayout() {
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : 'collapsed'}`}>
         <div className="admin-sidebar-header">
           <div className="admin-brand">
-            <span className="admin-brand-name">LOREN</span>
+            <span className="admin-brand-name">OL7</span>
             {sidebarOpen && <span className="admin-brand-sub">Admin Panel</span>}
           </div>
           <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)} id="sidebar-toggle-btn">

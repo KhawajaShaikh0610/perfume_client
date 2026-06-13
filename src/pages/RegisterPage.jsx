@@ -29,12 +29,12 @@ export default function RegisterPage() {
       <div className="login-bg-overlay" />
       <div className="login-card" style={{ maxWidth: '480px' }}>
         <div className="login-logo">
-          <span className="login-logo-text">LOREN</span>
+          <span className="login-logo-text">OL7</span>
           <span className="login-logo-sub">MAISON DE PARFUM</span>
         </div>
 
         <h1 className="login-title">Create Account</h1>
-        <p className="login-subtitle">Join the house of Loren</p>
+        <p className="login-subtitle">Join the house of OL7</p>
 
         {error && (
           <div className="login-error">

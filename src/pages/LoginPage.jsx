@@ -30,7 +30,7 @@ export default function LoginPage() {
       <div className="login-bg-overlay" />
       <div className="login-card">
         <div className="login-logo">
-          <span className="login-logo-text">LOREN</span>
+          <span className="login-logo-text">OL7</span>
           <span className="login-logo-sub">MAISON DE PARFUM</span>
         </div>
 

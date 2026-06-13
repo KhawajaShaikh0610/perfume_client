@@ -121,7 +121,7 @@ export default function PerfumeModal({ perfume, categories, onClose, onSaved }) 
             </div>
             <div className="form-group">
               <label htmlFor="p-brand">Brand *</label>
-              <input id="p-brand" name="brand" type="text" placeholder="e.g. Loren" value={form.brand} onChange={handleChange} required className="form-input" />
+              <input id="p-brand" name="brand" type="text" placeholder="e.g. OL7" value={form.brand} onChange={handleChange} required className="form-input" />
             </div>
           </div>
 
