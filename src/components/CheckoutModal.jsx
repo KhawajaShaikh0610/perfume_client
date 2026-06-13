@@ -30,6 +30,8 @@ export default function CheckoutModal({ cart, onClose, onSuccess }) {
       const orderItems = cart.map((item) => ({
         perfumeId: item.id,
         quantity: item.quantity,
+        size: item.size,
+        price: item.price,
       }));
 
       const payload = {

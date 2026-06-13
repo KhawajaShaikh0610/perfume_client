@@ -50,11 +50,12 @@ export default function CartDrawer({
     });
   };
 
+  console.log("cart::", cart)
   return (
     <div
       className={`fixed inset-0 z-50 transition-opacity duration-300 ${cartOpen
-          ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
+        ? "opacity-100 pointer-events-auto"
+        : "opacity-0 pointer-events-none"
         }`}
     >
       {/* Backdrop */}
@@ -66,8 +67,8 @@ export default function CartDrawer({
       {/* Drawer */}
       <div
         className={`fixed right-0 top-0 h-full w-full max-w-md bg-[#1e120e] text-[#fbf9f6] shadow-2xl p-8 flex flex-col transition-transform duration-300 ${cartOpen
-            ? "translate-x-0"
-            : "translate-x-full"
+          ? "translate-x-0"
+          : "translate-x-full"
           }`}
       >
         {/* Header */}

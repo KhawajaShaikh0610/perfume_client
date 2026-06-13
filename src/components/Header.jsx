@@ -27,7 +27,7 @@ export default function Header({ cart, setSearchOpen, setCartOpen, shakeCart, hi
             <a href="#shop" className="hover:text-[#c5a880] transition">Shop</a>
             <a href="#fragrances" className="hover:text-[#c5a880] transition">Fragrances</a>
             <a href="#ritual" className="hover:text-[#c5a880] transition">Ritual</a>
-            <a href="#bodycare" className="hover:text-[#c5a880] transition">Body Care</a>
+            {/* <a href="#bodycare" className="hover:text-[#c5a880] transition">Body Care</a> */}
             <a href="#sustainability" className="hover:text-[#c5a880] transition">House</a>
           </nav>
         )}

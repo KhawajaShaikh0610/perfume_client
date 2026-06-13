@@ -3,11 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { getPerfumes } from '../api/perfumeService';
 import { getCategories } from '../api/categoryService';
 import { apiPerfumeToDisplay } from '../data/perfumeData';
-import QuickViewModal from '../components/QuickViewModal';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-export default function ProductsPage({ cart, setCartOpen, shakeCart, addToCart }) {
+export default function ProductsPage({
+  cart,
+  setCartOpen,
+  shakeCart,
+  addToCart,
+  quickViewProduct,
+  setQuickViewProduct,
+  selectedSize,
+  setSelectedSize,
+  handleQuickView
+}) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -15,8 +24,6 @@ export default function ProductsPage({ cart, setCartOpen, shakeCart, addToCart }
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [sortBy, setSortBy] = useState('name-asc');
-  const [quickViewProduct, setQuickViewProduct] = useState(null);
-  const [selectedSize, setSelectedSize] = useState('100ml');
 
   useEffect(() => {
     const load = async () => {
@@ -210,14 +217,14 @@ export default function ProductsPage({ cart, setCartOpen, shakeCart, addToCart }
                   {/* Hover overlay */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 z-20">
                     <button
-                      onClick={() => { setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0].size : '100ml'); setQuickViewProduct(product); }}
+                      onClick={() => handleQuickView(product)}
                       className="px-5 py-2.5 bg-[#fbf9f6] text-[#1e120e] text-[10px] uppercase tracking-wider font-semibold hover:bg-[#c5a880] transition duration-300 rounded"
                     >
                       Quick View
                     </button>
                     {product.stock > 0 && (
                       <button
-                        onClick={() => addToCart(product, product.sizes && product.sizes.length > 0 ? product.sizes[0].size : '100ml')}
+                        onClick={() => addToCart(product)}
                         className="px-5 py-2.5 bg-[#1e120e] text-[#fbf9f6] text-[10px] uppercase tracking-wider font-semibold hover:bg-[#c5a880] hover:text-[#1e120e] transition duration-300 rounded"
                       >
                         Add to Bag
@@ -249,14 +256,6 @@ export default function ProductsPage({ cart, setCartOpen, shakeCart, addToCart }
       </div>
 
       {/* <Footer /> */}
-      {/* Quick View Modal */}
-      <QuickViewModal
-        quickViewProduct={quickViewProduct}
-        setQuickViewProduct={setQuickViewProduct}
-        selectedSize={selectedSize}
-        setSelectedSize={setSelectedSize}
-        addToCart={addToCart}
-      />
 
     </div>
   );

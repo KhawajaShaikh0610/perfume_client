@@ -23,7 +23,7 @@ export default function BathSection() {
             a lasting impression.
           </h2>
 
-          <div className="flex gap-8 uppercase tracking-[0.25em] text-xs">
+          {/* <div className="flex gap-8 uppercase tracking-[0.25em] text-xs">
             <button
               onClick={() => document.getElementById('bodycare')?.scrollIntoView({ behavior: 'smooth' })}
               className="border-b border-[#c5a880] pb-2 text-[#c5a880] hover:text-white transition duration-300"
@@ -36,7 +36,7 @@ export default function BathSection() {
             >
               Shop Body Lotion
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

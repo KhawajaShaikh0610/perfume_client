@@ -6,7 +6,6 @@ export default function SearchModal({
   searchQuery,
   setSearchQuery,
   fragranceDetails,
-  bodyCare,
   handleQuickView,
   addToCart
 }) {
@@ -65,13 +64,6 @@ export default function SearchModal({
             (() => {
               const results = [
                 ...fragranceDetails,
-                ...bodyCare.map((name) => ({
-                  name: `${name} Body Wash`,
-                  price: '₹45',
-                  image: '/img-2.png',
-                  description: 'A luxurious body care treatment delicately perfumed.',
-                  notes: null
-                }))
               ].filter(
                 (item) =>
                   item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { getPerfumes } from './api/perfumeService'
-import { bodyCare as staticBodyCare, apiPerfumeToDisplay } from './data/perfumeData'
+import { apiPerfumeToDisplay } from './data/perfumeData'
 
 // Landing page components
 import CustomCursor from './components/CustomCursor'
@@ -12,7 +12,6 @@ import Manifesto from './components/Manifesto'
 import NotesExplorer from './components/NotesExplorer'
 import ProductGrid from './components/ProductGrid'
 import Ritual from './components/Ritual'
-import BodyCareSection from './components/BodyCare'
 import BathSection from './components/BathSection'
 import FooterHero from './components/FooterHero'
 import Footer from './components/Footer'
@@ -45,17 +44,24 @@ function AdminRoute({ children }) {
 }
 
 // Main landing page
-function LandingPage({ cart, setCartOpen, shakeCart, addToCart }) {
+function LandingPage({
+  cart,
+  setCartOpen,
+  shakeCart,
+  addToCart,
+  quickViewProduct,
+  setQuickViewProduct,
+  selectedSize,
+  setSelectedSize,
+  handleQuickView
+}) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [quickViewProduct, setQuickViewProduct] = useState(null)
-  const [selectedSize, setSelectedSize] = useState('100ml')
   const [activeScentTab, setActiveScentTab] = useState(0)
   const [mouseCoords, setMouseCoords] = useState({ x: 0, y: 0 })
 
   // Data state
   const [fragranceDetails, setFragranceDetails] = useState([])
-  const [bodyCare, setBodyCare] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -69,26 +75,18 @@ function LandingPage({ cart, setCartOpen, shakeCart, addToCart }) {
           setFragranceDetails(apiPerfumes);
           // For body care, take first 8 names, or fallback to static if not enough
           const fetchedNames = apiPerfumes.map(p => p.name).slice(0, 8);
-          setBodyCare(fetchedNames.length > 0 ? fetchedNames : staticBodyCare);
         } else {
           setFragranceDetails(fragranceDetails);
-          setBodyCare(staticBodyCare);
         }
       } catch (err) {
         console.error('Failed to fetch data, using fallback:', err);
         setFragranceDetails(fragranceDetails);
-        setBodyCare(staticBodyCare);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
   }, []);
-
-  const handleQuickView = (product) => {
-    setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0].size : '100ml')
-    setQuickViewProduct(product)
-  }
 
   useEffect(() => {
     const handleMouseMove = (e) => setMouseCoords({ x: e.clientX, y: e.clientY })
@@ -144,12 +142,10 @@ function LandingPage({ cart, setCartOpen, shakeCart, addToCart }) {
       <NotesExplorer fragranceDetails={fragranceDetails} activeScentTab={activeScentTab} setActiveScentTab={setActiveScentTab} handleQuickView={handleQuickView} addToCart={addToCart} />
       <ProductGrid fragranceDetails={fragranceDetails} handleQuickView={handleQuickView} addToCart={addToCart} />
       <Ritual />
-      <BodyCareSection bodyCare={bodyCare} addToCart={addToCart} />
       <BathSection />
       <FooterHero />
       <Footer />
-      <SearchModal searchOpen={searchOpen} setSearchOpen={setSearchOpen} searchQuery={searchQuery} setSearchQuery={setSearchQuery} fragranceDetails={fragranceDetails} bodyCare={bodyCare} handleQuickView={handleQuickView} addToCart={addToCart} />
-      <QuickViewModal quickViewProduct={quickViewProduct} setQuickViewProduct={setQuickViewProduct} selectedSize={selectedSize} setSelectedSize={setSelectedSize} addToCart={addToCart} />
+      <SearchModal searchOpen={searchOpen} setSearchOpen={setSearchOpen} searchQuery={searchQuery} setSearchQuery={setSearchQuery} fragranceDetails={fragranceDetails} handleQuickView={handleQuickView} addToCart={addToCart} />
     </div>
   )
 }
@@ -160,20 +156,52 @@ export default function App() {
   const [checkoutOpen, setCheckoutOpen] = useState(false)
   const [shakeCart, setShakeCart] = useState(false)
 
-  const addToCart = (product, size = '100ml') => {
+  // Lifted QuickView state
+  const [quickViewProduct, setQuickViewProduct] = useState(null)
+  const [selectedSize, setSelectedSize] = useState('100ml')
+
+  const handleQuickView = (product) => {
+    setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0].size : '100ml')
+    setQuickViewProduct(product)
+  }
+
+  const addToCart = (product, size) => {
+    if (!product) return;
+
+    // If the product has sizes, and no size is specified, open the size selection modal
+    if (product.sizes && product.sizes.length > 0 && !size) {
+      setSelectedSize(product.sizes[0].size);
+      setQuickViewProduct(product);
+      return;
+    }
+
+    const finalSize = size || (product.sizes && product.sizes.length > 0 ? product.sizes[0].size : '100ml');
+
     setCart((prevCart) => {
       const existingIndex = prevCart.findIndex(
-        (item) => (item.id ? item.id === product.id : item.name === product.name) && item.size === size
+        (item) => (item.id ? item.id === product.id : item.name === product.name) && item.size === finalSize
       )
-      const selectedSizeData = product.sizes?.find(s => s.size === size);
-      const cartPrice = selectedSizeData ? `₹{parseFloat(selectedSizeData.price).toFixed(2)}` : (product.price || '₹0.00');
+      const selectedSizeData = product.sizes?.find(s => s.size === finalSize);
+
+      let numericPrice = 0;
+      if (selectedSizeData) {
+        numericPrice = parseFloat(selectedSizeData.price) || 0;
+      } else if (typeof product.numericPrice === 'number') {
+        numericPrice = product.numericPrice;
+      } else if (product.price) {
+        const cleanPriceStr = String(product.price)
+          .replace('From', '')
+          .replace('₹', '')
+          .trim();
+        numericPrice = parseFloat(cleanPriceStr) || 0;
+      }
 
       if (existingIndex > -1) {
         const newCart = [...prevCart]
         newCart[existingIndex] = { ...newCart[existingIndex], quantity: newCart[existingIndex].quantity + 1 }
         return newCart
       } else {
-        return [...prevCart, { ...product, size, price: cartPrice, quantity: 1 }]
+        return [...prevCart, { ...product, size: finalSize, price: numericPrice, numericPrice, quantity: 1 }]
       }
     })
     setCartOpen(true)
@@ -191,8 +219,32 @@ export default function App() {
     <>
       <Routes>
         {/* Public */}
-        <Route path="/" element={<LandingPage cart={cart} setCartOpen={setCartOpen} shakeCart={shakeCart} addToCart={addToCart} />} />
-        <Route path="/perfumes" element={<ProductsPage cart={cart} setCartOpen={setCartOpen} shakeCart={shakeCart} addToCart={addToCart} />} />
+        <Route path="/" element={
+          <LandingPage
+            cart={cart}
+            setCartOpen={setCartOpen}
+            shakeCart={shakeCart}
+            addToCart={addToCart}
+            quickViewProduct={quickViewProduct}
+            setQuickViewProduct={setQuickViewProduct}
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+            handleQuickView={handleQuickView}
+          />
+        } />
+        <Route path="/perfumes" element={
+          <ProductsPage
+            cart={cart}
+            setCartOpen={setCartOpen}
+            shakeCart={shakeCart}
+            addToCart={addToCart}
+            quickViewProduct={quickViewProduct}
+            setQuickViewProduct={setQuickViewProduct}
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+            handleQuickView={handleQuickView}
+          />
+        } />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
@@ -220,6 +272,13 @@ export default function App() {
       {checkoutOpen && (
         <CheckoutModal cart={cart} onClose={() => setCheckoutOpen(false)} onSuccess={() => { setCart([]); setCheckoutOpen(false); }} />
       )}
+      <QuickViewModal
+        quickViewProduct={quickViewProduct}
+        setQuickViewProduct={setQuickViewProduct}
+        selectedSize={selectedSize}
+        setSelectedSize={setSelectedSize}
+        addToCart={addToCart}
+      />
     </>
   )
 }
