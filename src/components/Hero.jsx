@@ -1,54 +1,85 @@
-import React, { useState, useRef } from 'react';
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Hero({ fragranceDetails, addToCart }) {
-  const heroRef = useRef(null)
-  const navigate = useNavigate()
+export default function Hero() {
+  const navigate = useNavigate();
 
   return (
     <section
-      ref={heroRef}
-      className="relative h-screen overflow-hidden bg-[#2d140d]"
+      className="relative min-h-screen overflow-hidden"
       style={{
         backgroundImage: "url('/banner1.jpeg')",
-        backgroundSize: "covcer",
-        backgroundPosition: "center"
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
-      {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-black/30" />
+      {/* Luxury Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#00000090] via-[#00000050] to-transparent" />
 
-      {/* CONTENT */}
-      <div className="relative z-10 h-full grid lg:grid-cols-2">
+      {/* Content */}
+      <div className="relative z-10 flex items-center h-screen">
+        <div className="max-w-7xl mx-auto w-full px-6 lg:px-10 xl:px-0">
+          <div className="max-w-2xl">
 
-        {/* LEFT CONTENT */}
-        <div className="flex flex-col justify-center pl-14 lg:pl-20 pt-16 text-white text-left">
-          <p className="uppercase tracking-[0.32em] text-[11px] text-black mb-8 animate-fadeIn">
-            One Life, Infinite Fragrances
-          </p>
+            {/* Tagline */}
+            <p className="uppercase tracking-[0.35em] text-[11px] sm:text-xs text-[#d4b483] mb-6 animate-fadeIn">
+              One Life, Infinite Fragrances
+            </p>
 
-          <h1 className="serif text-[72px] leading-[0.95] font-light max-w-[560px] flex flex-col">
-            {/* <span className="text-reveal-container">
-              <span className="text-reveal-item inline-block" style={{ animationDelay: '0.2s' }}>A fragrance for every chapter of life,</span>
-            </span> */}
-            <span className="text-reveal-container">
-              <span className="text-reveal-item inline-block" style={{ animationDelay: '0.5s' }}>Where every scent tells a story</span>
-            </span>
-          </h1>
+            {/* Heading */}
+            <h1
+              className="
+                font-serif
+                text-white
+                font-light
+                leading-[1]
+                text-3xl
+                sm:text-5xl
+                lg:text-6xl
+                xl:text-7xl
+                mb-8
+              "
+            >
+              Where every scent
+              <br />
+              tells a story.
+            </h1>
 
-          <button
-            // onClick={() => {
-            //   const irisNoir = fragranceDetails.find(f => f.name === 'Iris Noir')
-            //   addToCart(irisNoir || fragranceDetails[0])
-            // }}
-            onClick={() => navigate('/perfumes')}
-            className="mt-10 border border-white/30 w-fit px-8 py-4 uppercase tracking-[0.22em] text-[11px] hover:bg-[#c5a880] hover:text-[#1e120e] hover:border-[#c5a880] transition-all duration-300"
-          >
-            Check now ↗
-          </button>
+            {/* Description */}
+            <p className="text-white/80 text-base sm:text-md max-w-lg leading-relaxed mb-10">
+              Discover luxurious fragrances crafted to elevate every moment.
+              Each bottle captures elegance, emotion, and timeless sophistication.
+            </p>
+
+            {/* Button */}
+            <button
+              onClick={() => navigate("/perfumes")}
+              className="
+                group
+                border
+                border-[#d4b483]
+                text-[#d4b483]
+                px-8
+                py-4
+                uppercase
+                tracking-[0.25em]
+                text-xs
+                transition-all
+                duration-500
+                hover:bg-[#d4b483]
+                hover:text-black
+              "
+            >
+              Explore Collection
+              <span className="ml-2 inline-block transition-transform duration-300 group-hover:translate-x-1">
+                ↗
+              </span>
+            </button>
+
+          </div>
         </div>
-
       </div>
     </section>
-  )
+  );
 }

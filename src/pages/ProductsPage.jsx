@@ -102,22 +102,74 @@ export default function ProductsPage({
         }}
       />
 
-      {/* Hero banner */}
-      <section className="relative h-screen overflow-hidden bg-[#2d140d]"
+      {/* Hero Banner */}
+      <section
+        className="relative min-h-[80vh] lg:min-h-screen overflow-hidden"
         style={{
           backgroundImage: "url('/banner1.jpeg')",
-          backgroundSize: "covcer",
-          backgroundPosition: "center"
-        }}>
-        <div className="h-screen flex flex-col items-start justify-center px-8 text-left">
-          <p className="uppercase tracking-[0.35em] text-[10px] text-[#c5a880] mb-4 font-semibold">THE COLLECTION</p>
-          <h1 className="serif text-6xl mb-4">Our Fragrances</h1>
-          <p className="text-white/60 max-w-xl text-sm leading-relaxed text-black">
-            Discover meticulously crafted scents, each telling its own story of elegance, emotion, and artistry.
-          </p>
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        {/* Luxury Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#00000090] via-[#00000050] to-transparent" />
+
+
+        {/* Content */}
+        <div className="relative z-10 flex items-center h-full min-h-[80vh] lg:min-h-screen">
+          <div className="max-w-7xl mx-auto w-full  px-6 lg:px-10 xl:px-0">
+
+            <div className="max-w-2xl">
+
+              {/* Label */}
+              <span className="inline-block uppercase tracking-[0.4em] text-[11px] text-[#d4b483] mb-6 font-medium">
+                The Collection
+              </span>
+
+              {/* Heading */}
+              <h1 className="font-serif
+                text-white
+                font-light
+                leading-[1]
+                text-3xl
+                sm:text-5xl
+                lg:text-6xl
+                xl:text-7xl
+                mb-8">
+                Our
+                <br />
+                Fragrances
+              </h1>
+
+              {/* Description */}
+              <p className="text-white/75 text-base md:text-lg leading-relaxed max-w-xl mb-10">
+                Explore an exquisite collection of signature fragrances,
+                crafted to capture elegance, individuality, and timeless
+                sophistication in every spray.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap gap-4">
+                {/* <button
+                  onClick={() => navigate("/shop")}
+                  className="px-8 py-4 bg-[#d4b483] text-black uppercase tracking-[0.25em] text-xs font-medium transition-all duration-300 hover:scale-105"
+                >
+                  Shop Now
+                </button> */}
+
+                <button
+                  onClick={() => navigate("/")}
+                  className="px-8 py-4 border border-white/30 text-white uppercase tracking-[0.25em] text-xs transition-all duration-300 hover:bg-white hover:text-black"
+                >
+                  Discover More
+                </button>
+              </div>
+
+            </div>
+          </div>
         </div>
       </section>
-
       {/* Filters & Controls */}
       <div className="max-w-7xl mx-auto px-6 py-6">
         <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
