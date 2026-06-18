@@ -1,0 +1,61 @@
+# This file tells Netlify how to serve files
+# Place this in your public folder
+
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+
+/*.js
+  Content-Type: application/javascript
+
+/*.mjs
+  Content-Type: application/javascript
+
+/*.cjs
+  Content-Type: application/javascript
+
+/assets/*.js
+  Content-Type: application/javascript
+
+/assets/*.css
+  Content-Type: text/css
+
+/*.css
+  Content-Type: text/css
+
+/*.json
+  Content-Type: application/json
+
+/*.png
+  Content-Type: image/png
+
+/*.jpg
+  Content-Type: image/jpeg
+
+/*.jpeg
+  Content-Type: image/jpeg
+
+/*.svg
+  Content-Type: image/svg+xml
+
+/*.ico
+  Content-Type: image/x-icon
+
+/*.webp
+  Content-Type: image/webp
+
+/*.woff2
+  Content-Type: font/woff2
+
+/*.woff
+  Content-Type: font/woff
+
+/*.ttf
+  Content-Type: font/ttf
+
+/*.eot
+  Content-Type: application/vnd.ms-fontobject
+
+/*.txt
+  Content-Type: text/plain
