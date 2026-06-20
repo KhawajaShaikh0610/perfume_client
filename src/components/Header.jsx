@@ -11,7 +11,7 @@ export default function Header({ cart, setSearchOpen, setCartOpen, shakeCart, hi
       <div className="max-w-7xl mx-auto px-0 py-4 flex items-center justify-between text-white">
 
         <div className=''>
-          <img src="public/logo-2.png" alt="logo" className='w-27 h-16 cursor-pointer'
+          <img src="/logo-2.png" alt="logo" className='w-27 h-16 cursor-pointer'
             onClick={() => {
               if (location.pathname !== '/') {
                 navigate('/')

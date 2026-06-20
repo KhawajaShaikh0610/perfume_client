@@ -39,7 +39,7 @@ export default function Manifesto() {
 
             {/* Video */}
             <video
-              src="public/rel1.mov"
+              src="/rel1.mov"
               autoPlay
               muted
               loop
